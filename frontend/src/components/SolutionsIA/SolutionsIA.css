@@ -1,0 +1,97 @@
+/* SolutionsIA.css - Styles pour la page Solutions IA */
+
+.solutions-ia-page {
+    padding: 2rem 0;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Styles pour les onglets de catégorie */
+.category-tabs {
+    overflow-x: auto;
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.category-tab {
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    margin-bottom: 10px;
+}
+
+.category-tab:hover {
+    transform: translateY(-2px);
+}
+
+.category-tab.active {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Section de la catégorie active */
+.active-category-section {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+}
+
+/* Cartes des modèles */
+.model-card {
+    height: 100%;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    background-color: white !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eaeaea;
+}
+
+.model-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.model-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #4361ee;
+    color: white;
+    font-size: 1.5rem;
+}
+
+/* Spécifique à la Santé */
+.model-card .bi-lungs,
+.model-card .bi-clipboard2-pulse,
+.model-card .bi-eye,
+.model-card .bi-aspect-ratio,
+.model-card .bi-virus {
+    color: white;
+}
+
+.try-model-btn {
+    margin-top: 1rem;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.try-model-btn:hover {
+    transform: translateX(5px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .category-tab {
+        min-width: auto;
+        padding: 0.5rem 1rem;
+    }
+
+    .model-card {
+        margin-bottom: 1rem;
+    }
+}

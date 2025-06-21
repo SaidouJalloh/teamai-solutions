@@ -1,0 +1,16 @@
+keras
+tensorflow
+numpy 
+Pillow
+h5py
+gradio
+torch
+
+
+
+fastapi
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+pydantic[email]==2.5.0
+flask-cors==6.0.0

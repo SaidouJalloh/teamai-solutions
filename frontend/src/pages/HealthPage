@@ -1,0 +1,836 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Container, Row, Col, Card, Button, Tabs, Tab, Spinner, Form, Alert } from 'react-bootstrap';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
+// Composant principal pour le domaine de la santé
+function HealthPage() {
+    return (
+        <Routes>
+            <Route path="/" element={<HealthOverview />} />
+            <Route path="/tuberculosis" element={<TuberculosisAnalysis />} />
+            <Route path="/pneumonia" element={<PneumoniaAnalysis />} />
+        </Routes>
+    );
+}
+
+// Vue d'ensemble du domaine santé
+function HealthOverview() {
+    const navigate = useNavigate();
+    const [healthSolutions, setHealthSolutions] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchHealthData = async () => {
+            try {
+                setLoading(true);
+
+                // En production, remplacer par un vrai appel API
+                // const response = await axios.get(`${API_URL}/api/health/solutions`);
+                // setHealthSolutions(response.data.solutions);
+
+                // Données de test
+                setHealthSolutions([
+                    {
+                        id: 'tuberculosis',
+                        title: 'Détection de la tuberculose',
+                        description: 'Analyse automatisée de radiographies pulmonaires pour la détection de la tuberculose avec une précision de plus de 95%.',
+                        image: 'tb_detection.jpg',
+                        benefits: [
+                            'Diagnostic rapide et précis',
+                            'Détection précoce pour un meilleur traitement',
+                            'Assistance aux radiologues dans les zones à ressources limitées'
+                        ],
+                        accuracy: 96.2,
+                        models: [
+                            { id: 'tb-v1', name: 'TuberculosisDetect v1', accuracy: 93.5, resolution: '64x64 pixels' },
+                            { id: 'tb-v2', name: 'TuberculosisDetect v2', accuracy: 96.2, resolution: '256x256 pixels' }
+                        ]
+                    },
+                    {
+                        id: 'pneumonia',
+                        title: 'Détection de la pneumonie',
+                        description: 'Solution d\'IA pour l\'identification rapide de la pneumonie sur des radiographies thoraciques, aidant à un diagnostic précoce.',
+                        image: 'pneumonia_detection.jpg',
+                        benefits: [
+                            'Analyse rapide des radiographies thoraciques',
+                            'Support décisionnel pour les professionnels de santé',
+                            'Réduction des erreurs de diagnostic'
+                        ],
+                        accuracy: 91.8,
+                        models: [
+                            { id: 'pn-v1', name: 'PneumoniaDetect', accuracy: 91.8, resolution: '64x64 pixels' }
+                        ]
+                    },
+                    {
+                        id: 'coming-soon',
+                        title: 'Nouveaux modèles à venir',
+                        description: 'Notre équipe travaille sur de nouveaux modèles de diagnostic pour d\'autres pathologies pulmonaires et au-delà.',
+                        image: 'coming_soon.jpg',
+                        comingSoon: true,
+                        upcomingFeatures: [
+                            'Détection de COVID-19',
+                            'Analyse de nodules pulmonaires',
+                            'Classification des maladies cardiaques'
+                        ]
+                    }
+                ]);
+
+                setLoading(false);
+            } catch (error) {
+                console.error("Erreur lors du chargement des données de santé:", error);
+                setLoading(false);
+            }
+        };
+
+        fetchHealthData();
+    }, []);
+
+    return (
+        <div className="health-page animate-in">
+            {/* Hero section */}
+            <div className="health-hero-section text-center py-5">
+                <Container>
+                    <div className="health-icon-large mb-3">
+                        <i className="bi bi-heart-pulse"></i>
+                    </div>
+                    <h1 className="display-4 fw-bold mb-3">Solutions IA pour la santé</h1>
+                    <p className="lead mb-4">
+                        Nos technologies d'intelligence artificielle améliorent la détection et le diagnostic
+                        des pathologies pulmonaires pour une meilleure prise en charge des patients.
+                    </p>
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        onClick={() => navigate('/health/tuberculosis')}
+                        className="btn-with-icon"
+                    >
+                        <i className="bi bi-search me-2"></i> Essayer maintenant
+                    </Button>
+                </Container>
+            </div>
+
+            {/* Solutions de santé */}
+            <Container className="py-5">
+                <h2 className="section-title mb-4">Nos solutions médicales</h2>
+
+                {loading ? (
+                    <div className="text-center py-5">
+                        <Spinner animation="border" variant="primary" />
+                        <p className="mt-3">Chargement des solutions de santé...</p>
+                    </div>
+                ) : (
+                    <Row className="g-4">
+                        {healthSolutions.map(solution => (
+                            <Col key={solution.id} lg={4} md={6} className="mb-4">
+                                <Card className="health-solution-card h-100 border-0 shadow-sm hover-effect">
+                                    <div className="solution-card-image">
+                                        <div className={`solution-accuracy ${solution.comingSoon ? 'coming-soon' : ''}`}>
+                                            {solution.comingSoon ? (
+                                                <span>À venir</span>
+                                            ) : (
+                                                <span>Précision: {solution.accuracy}%</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <Card.Body>
+                                        <Card.Title>{solution.title}</Card.Title>
+                                        <Card.Text>{solution.description}</Card.Text>
+
+                                        {solution.benefits && (
+                                            <div className="solution-benefits">
+                                                <h6>Avantages:</h6>
+                                                <ul className="benefit-list">
+                                                    {solution.benefits.map((benefit, index) => (
+                                                        <li key={index}><i className="bi bi-check-circle-fill"></i> {benefit}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+
+                                        {solution.upcomingFeatures && (
+                                            <div className="upcoming-features">
+                                                <h6>Fonctionnalités à venir:</h6>
+                                                <ul className="feature-list">
+                                                    {solution.upcomingFeatures.map((feature, index) => (
+                                                        <li key={index}><i className="bi bi-hourglass-split"></i> {feature}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+
+                                        {solution.models && (
+                                            <div className="solution-models">
+                                                <h6>Modèles disponibles:</h6>
+                                                {solution.models.map(model => (
+                                                    <div key={model.id} className="model-item">
+                                                        <div className="model-name">{model.name}</div>
+                                                        <div className="model-meta">
+                                                            <span className="model-accuracy">Précision: {model.accuracy}%</span>
+                                                            <span className="model-resolution">{model.resolution}</span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </Card.Body>
+                                    <Card.Footer className="bg-white border-0">
+                                        {solution.comingSoon ? (
+                                            <Button
+                                                variant="outline-primary"
+                                                className="w-100"
+                                                onClick={() => navigate('/contact')}
+                                            >
+                                                Être informé(e) des nouveautés
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="primary"
+                                                className="w-100"
+                                                onClick={() => navigate(`/health/${solution.id}`)}
+                                            >
+                                                Essayer maintenant
+                                            </Button>
+                                        )}
+                                    </Card.Footer>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
+                )}
+            </Container>
+
+            {/* Section sur la technologie */}
+            <section className="technology-section py-5 bg-light">
+                <Container>
+                    <h2 className="section-title mb-4">Notre technologie</h2>
+
+                    <Row className="align-items-center">
+                        <Col lg={6}>
+                            <div className="technology-content">
+                                <h3 className="mb-3">Intelligence artificielle avancée pour le diagnostic médical</h3>
+                                <p className="mb-4">
+                                    Nos modèles d'IA utilisent des réseaux neuronaux convolutifs (CNN) profonds pour analyser les radiographies
+                                    pulmonaires et détecter avec précision les signes de tuberculose et de pneumonie.
+                                </p>
+
+                                <div className="technology-features">
+                                    <div className="feature-item">
+                                        <div className="feature-icon">
+                                            <i className="bi bi-braces"></i>
+                                        </div>
+                                        <div className="feature-text">
+                                            <h4>Algorithmes avancés</h4>
+                                            <p>Architectures CNN optimisées pour la détection de pathologies sur des images médicales.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="feature-item">
+                                        <div className="feature-icon">
+                                            <i className="bi bi-database"></i>
+                                        </div>
+                                        <div className="feature-text">
+                                            <h4>Formation sur des données diversifiées</h4>
+                                            <p>Modèles entraînés sur des milliers de radiographies annotées par des experts.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="feature-item">
+                                        <div className="feature-icon">
+                                            <i className="bi bi-speedometer2"></i>
+                                        </div>
+                                        <div className="feature-text">
+                                            <h4>Analyse en temps réel</h4>
+                                            <p>Résultats rapides permettant une prise de décision immédiate.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Col>
+
+                        <Col lg={6}>
+                            <div className="technology-image-container">
+                                <div className="technology-image-placeholder">
+                                    {/* Image ou graphique illustrant la technologie */}
+                                </div>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </section>
+
+            {/* Section d'impact */}
+            <section className="impact-section py-5">
+                <Container>
+                    <h2 className="section-title text-center mb-5">Notre impact</h2>
+
+                    <div className="impact-stats">
+                        <Row className="text-center">
+                            <Col md={4}>
+                                <div className="impact-stat">
+                                    <div className="stat-value">10,000+</div>
+                                    <div className="stat-label">Analyses réalisées</div>
+                                </div>
+                            </Col>
+
+                            <Col md={4}>
+                                <div className="impact-stat">
+                                    <div className="stat-value">95%</div>
+                                    <div className="stat-label">Précision moyenne</div>
+                                </div>
+                            </Col>
+
+                            <Col md={4}>
+                                <div className="impact-stat">
+                                    <div className="stat-value">15+</div>
+                                    <div className="stat-label">Partenaires médicaux</div>
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
+
+                    <div className="impact-quote text-center mt-5">
+                        <blockquote>
+                            "La technologie de TeamAI Solutions nous a permis d'améliorer considérablement notre capacité de diagnostic,
+                            notamment dans les zones rurales où l'accès aux radiologues est limité."
+                        </blockquote>
+                        <cite>Dr. Ahmed Hassan, Chef du service de pneumologie, Hôpital de Djibouti</cite>
+                    </div>
+                </Container>
+            </section>
+
+            {/* Appel à l'action */}
+            <section className="cta-section py-5">
+                <Container>
+                    <Row className="align-items-center">
+                        <Col lg={8}>
+                            <h2 className="cta-title">Prêt à améliorer vos capacités de diagnostic ?</h2>
+                            <p className="cta-text">
+                                Essayez nos outils d'IA médicale ou contactez-nous pour une démonstration personnalisée.
+                            </p>
+                        </Col>
+                        <Col lg={4} className="text-lg-end mt-3 mt-lg-0">
+                            <div className="d-flex gap-3 justify-content-lg-end">
+                                <Button
+                                    variant="primary"
+                                    onClick={() => navigate('/health/tuberculosis')}
+                                >
+                                    Essayer maintenant
+                                </Button>
+                                <Button
+                                    variant="outline-light"
+                                    onClick={() => navigate('/contact')}
+                                >
+                                    Nous contacter
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </section>
+        </div>
+    );
+}
+
+// Analyse de tuberculose
+function TuberculosisAnalysis() {
+    const navigate = useNavigate();
+    const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [predictions, setPredictions] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [analysisCompleted, setAnalysisCompleted] = useState(false);
+    const [modelTab, setModelTab] = useState('tb1');
+    const [infoTopic, setInfoTopic] = useState('Description');
+    const [diseaseInfo, setDiseaseInfo] = useState('');
+
+    // Référence pour les résultats
+    const resultsRef = useRef(null);
+
+    // Charger les informations sur la maladie quand le sujet change
+    useEffect(() => {
+        const fetchDiseaseInfo = async () => {
+            try {
+                // En production, utiliser un appel API
+                // const response = await axios.get(`${API_URL}/api/health/disease-info/tuberculosis/${infoTopic}`);
+                // setDiseaseInfo(response.data.info);
+
+                // Données de test
+                let info = '';
+
+                if (infoTopic === 'Description') {
+                    info = `**Description de la tuberculose**
+
+La tuberculose (TB) est une maladie infectieuse causée par la bactérie *Mycobacterium tuberculosis*. 
+Elle affecte principalement les poumons (tuberculose pulmonaire), mais peut aussi toucher d'autres organes (tuberculose extrapulmonaire). 
+
+Les symptômes courants incluent :
+- Une toux persistante (parfois avec du sang)
+- De la fièvre
+- Des sueurs nocturnes
+- Une perte de poids
+- Une fatigue intense
+
+La TB se transmet par l'inhalation de gouttelettes contaminées provenant de la toux ou des éternuements d'une personne infectée. 
+Elle peut être latente (asymptomatique) ou active (symptomatique).`;
+                } else if (infoTopic === 'Prévention') {
+                    info = `**Prévention de la tuberculose**
+
+1. **Vaccination** :
+   - Le vaccin BCG (Bacille Calmette-Guérin) est utilisé dans de nombreux pays pour prévenir les formes graves de TB, notamment chez les enfants.
+
+2. **Dépistage précoce** :
+   - Identifier et traiter rapidement les cas actifs de TB pour éviter la propagation.
+   - Utiliser des tests comme la radiographie pulmonaire, le test cutané à la tuberculine (TST) ou les tests sanguins (IGRA).
+
+3. **Mesures d'hygiène** :
+   - Couvrir la bouche et le nez en toussant ou en éternuant.
+   - Se laver régulièrement les mains avec de l'eau et du savon.
+
+4. **Ventilation des espaces** :
+   - Améliorer la circulation de l'air dans les lieux fermés pour réduire le risque de transmission.
+
+5. **Traitement préventif** :
+   - Pour les personnes exposées à un risque élevé (comme les proches de patients atteints de TB ou les personnes vivant avec le VIH), un traitement préventif à base d'antibiotiques peut être prescrit.`;
+                } else if (infoTopic === 'Traitements') {
+                    info = `**Traitements de la tuberculose**
+
+Le traitement de la tuberculose dépend de sa forme (latente ou active) et de sa résistance aux médicaments :
+
+1. **Traitement antibiotique** :
+   - La TB active se soigne avec une combinaison d'antibiotiques pris sur une période prolongée (généralement 6 à 9 mois).
+   - Les médicaments les plus courants sont l'isoniazide, la rifampicine, l'éthambutol et le pyrazinamide.
+
+2. **Traitement directement observé (DOT)** :
+   - Pour s'assurer de l'observance du traitement, un professionnel de santé supervise souvent la prise des médicaments.
+
+3. **Traitement des formes résistantes** :
+   - En cas de TB multirésistante (TB-MR) ou ultrarésistante (TB-UR), des schémas thérapeutiques plus complexes et plus longs sont nécessaires.
+   - Des médicaments de deuxième ligne, comme la lévofloxacine ou le bédaquiline, peuvent être utilisés.
+
+4. **Traitement de la TB latente** :
+   - Pour éviter que la TB latente ne devienne active, un traitement préventif à base d'isoniazide ou de rifampicine peut être prescrit.
+
+5. **Suivi médical** :
+   - Des examens réguliers, y compris des tests d'imagerie (radiographie pulmonaire) et des analyses de crachats, sont essentiels pour surveiller l'efficacité du traitement.
+   - Un suivi rigoureux est nécessaire pour prévenir les rechutes.`;
+                }
+
+                setDiseaseInfo(info);
+            } catch (error) {
+                console.error("Erreur lors du chargement des informations:", error);
+            }
+        };
+
+        fetchDiseaseInfo();
+    }, [infoTopic]);
+
+    // Gestionnaire de changement d'image
+    const handleImageChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setImage(file);
+            setImagePreview(URL.createObjectURL(file));
+            setPredictions(null); // Réinitialiser les prédictions
+            setAnalysisCompleted(false);
+        }
+    };
+
+    // Analyser l'image
+    const analyzeImage = async () => {
+        if (!image) return;
+
+        setLoading(true);
+        setError(null);
+        setAnalysisCompleted(false);
+
+        try {
+            // Préparer le formulaire
+            const formData = new FormData();
+            formData.append('file', image);
+
+            // Endpoint en fonction du modèle sélectionné
+            const endpoint = modelTab === 'tb1'
+                ? `${API_URL}/api/health/analyze/tuberculosis/v1`
+                : `${API_URL}/api/health/analyze/tuberculosis/v2`;
+
+            // En production, utiliser un vrai appel API
+            // const response = await axios.post(endpoint, formData, {
+            //   headers: { 'Content-Type': 'multipart/form-data' }
+            // });
+            // setPredictions(response.data.predictions);
+
+            // Simulation pour le test
+            setTimeout(() => {
+                const mockPredictions = {
+                    'Normal': Math.random() * 0.3,
+                    'Tuberculosis': Math.random() * 0.7 + 0.3
+                };
+
+                setPredictions(mockPredictions);
+                setAnalysisCompleted(true);
+                setLoading(false);
+
+                // Faire défiler vers les résultats
+                if (resultsRef.current) {
+                    resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 2000);
+
+        } catch (error) {
+            console.error("Erreur lors de l'analyse:", error);
+            setError("Une erreur s'est produite lors de l'analyse de l'image. Veuillez réessayer.");
+            setLoading(false);
+        }
+    };
+
+    // Déterminer l'état de santé
+    const getHealthStatus = () => {
+        if (!predictions) return null;
+        return predictions['Tuberculosis'] > 0.5 ? 'risk' : 'healthy';
+    };
+
+    return (
+        <div className="tuberculosis-analysis-page animate-in">
+            <Container className="py-4">
+                <Button
+                    variant="link"
+                    className="back-button d-inline-flex align-items-center mb-4"
+                    onClick={() => navigate('/health')}
+                >
+                    <i className="bi bi-arrow-left me-2"></i> Retour aux solutions de santé
+                </Button>
+
+                <h1 className="mb-4">Détection de la tuberculose</h1>
+                <p className="lead mb-4">
+                    Notre technologie d'IA analyse les radiographies pulmonaires pour détecter les signes de tuberculose
+                    avec une précision élevée, aidant les professionnels de santé dans leur diagnostic.
+                </p>
+
+                <Tabs
+                    activeKey={modelTab}
+                    onSelect={(k) => setModelTab(k)}
+                    className="mb-4 analyze-tabs"
+                    justify
+                >
+                    <Tab eventKey="tb1" title={<span><i className="bi bi-images me-2"></i>TuberculosisDetect v1</span>}>
+                        <Card className="mb-4 border-0 shadow-sm">
+                            <Card.Body>
+                                <Card.Title className="text-primary">TuberculosisDetect v1</Card.Title>
+                                <Card.Text>
+                                    Ce modèle utilise un réseau neuronal convolutif (CNN) pour analyser les radiographies
+                                    thoraciques avec une résolution de 64x64 pixels. Précision: 93.5%.
+                                </Card.Text>
+                                <div className="model-tags">
+                                    <span className="model-tag">CNN</span>
+                                    <span className="model-tag">64x64px</span>
+                                    <span className="model-tag">Tuberculose</span>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Tab>
+                    <Tab eventKey="tb2" title={<span><i className="bi bi-image-alt me-2"></i>TuberculosisDetect v2</span>}>
+                        <Card className="mb-4 border-0 shadow-sm">
+                            <Card.Body>
+                                <Card.Title className="text-primary">TuberculosisDetect v2</Card.Title>
+                                <Card.Text>
+                                    Version améliorée avec une résolution de 256x256 pixels pour capturer plus de détails.
+                                    Précision: 96.2%.
+                                </Card.Text>
+                                <div className="model-tags">
+                                    <span className="model-tag">CNN</span>
+                                    <span className="model-tag">256x256px</span>
+                                    <span className="model-tag">Haute résolution</span>
+                                    <span className="model-tag">Tuberculose</span>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Tab>
+                </Tabs>
+
+                <Row>
+                    <Col lg={6}>
+                        <Card className="mb-4 border-0 shadow-sm upload-card">
+                            <Card.Body>
+                                <Card.Title>
+                                    <i className="bi bi-cloud-upload me-2"></i>
+                                    Télécharger une image
+                                </Card.Title>
+
+                                <div className="upload-area mt-4">
+                                    <Form.Group className="mb-3">
+                                        <div className="custom-file-upload">
+                                            <input
+                                                type="file"
+                                                id="image-upload"
+                                                className="file-input"
+                                                accept="image/*"
+                                                onChange={handleImageChange}
+                                            />
+                                            <label htmlFor="image-upload" className="file-upload-label">
+                                                <div className="upload-icon">
+                                                    <i className="bi bi-image"></i>
+                                                </div>
+                                                <div className="upload-text">
+                                                    <span className="primary-text">Choisir une radiographie</span>
+                                                    <span className="secondary-text">ou glisser-déposer ici</span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </Form.Group>
+
+                                    {imagePreview && (
+                                        <div className="image-preview-container">
+                                            <img
+                                                src={imagePreview}
+                                                alt="Aperçu"
+                                                className="img-preview"
+                                            />
+                                            <Button
+                                                variant="outline-danger"
+                                                size="sm"
+                                                className="remove-image-btn"
+                                                onClick={() => {
+                                                    setImagePreview(null);
+                                                    setImage(null);
+                                                    setPredictions(null);
+                                                    setAnalysisCompleted(false);
+                                                }}
+                                            >
+                                                <i className="bi bi-x-lg"></i>
+                                            </Button>
+                                        </div>
+                                    )}
+
+                                    <Button
+                                        variant="primary"
+                                        onClick={analyzeImage}
+                                        disabled={!image || loading}
+                                        className="w-100 mt-3 analyze-btn"
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />{' '}
+                                                Analyse en cours...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className="bi bi-search me-2"></i> Analyser l'image
+                                            </>
+                                        )}
+                                    </Button>
+                                </div>
+                            </Card.Body>
+                        </Card>
+
+                        <Card className="border-0 shadow-sm info-card">
+                            <Card.Body>
+                                <Card.Title>
+                                    <i className="bi bi-info-circle me-2"></i>
+                                    Informations sur la tuberculose
+                                </Card.Title>
+
+                                <Form.Group className="mb-3 mt-4">
+                                    <Form.Label>Choisir un sujet</Form.Label>
+                                    <Form.Select
+                                        value={infoTopic}
+                                        onChange={(e) => setInfoTopic(e.target.value)}
+                                        className="topic-select"
+                                    >
+                                        <option value="Description">Description</option>
+                                        <option value="Prévention">Prévention</option>
+                                        <option value="Traitements">Traitements</option>
+                                    </Form.Select>
+                                </Form.Group>
+
+                                <div className="info-content mt-4">
+                                    {diseaseInfo && (
+                                        <div
+                                            className="disease-info"
+                                            dangerouslySetInnerHTML={{ __html: diseaseInfo.replace(/\n/g, '<br>') }}
+                                        />
+                                    )}
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+                    <Col lg={6} ref={resultsRef}>
+                        <Card className={`border-0 shadow-sm results-card ${analysisCompleted ? 'has-results' : ''} ${getHealthStatus() || ''}`}>
+                            <Card.Body>
+                                <Card.Title>
+                                    <i className="bi bi-bar-chart me-2"></i>
+                                    Résultats de l'analyse
+                                </Card.Title>
+
+                                {error && (
+                                    <Alert variant="danger" className="mt-4">
+                                        <i className="bi bi-exclamation-triangle me-2"></i>
+                                        {error}
+                                    </Alert>
+                                )}
+
+                                {loading && (
+                                    <div className="text-center py-5">
+                                        <div className="spinner-container">
+                                            <Spinner animation="border" role="status" variant="primary" className="custom-spinner" />
+                                            <svg className="spinner-track" viewBox="0 0 100 100">
+                                                <circle cx="50" cy="50" r="40" />
+                                            </svg>
+                                        </div>
+                                        <p className="mt-4 loading-text">
+                                            Analyse de l'image en cours<span className="dot-animation">...</span>
+                                        </p>
+                                        <p className="text-muted small">Notre IA analyse attentivement votre radiographie</p>
+                                    </div>
+                                )}
+
+                                {!loading && predictions && (
+                                    <div className="mt-4 prediction-results animate-results">
+                                        <h5 className="prediction-title">Prédictions :</h5>
+
+                                        {Object.entries(predictions).map(([label, value]) => (
+                                            <div key={label} className="mb-4 prediction-item">
+                                                <div className="d-flex justify-content-between mb-2">
+                                                    <span className={`prediction-label ${label === 'Normal' ? 'text-success' : 'text-warning'}`}>
+                                                        <i className={`bi ${label === 'Normal' ? 'bi-shield-check' : 'bi-shield-exclamation'} me-2`}></i>
+                                                        {label}
+                                                    </span>
+                                                    <span className={`prediction-value ${label === 'Normal' ? 'text-success' : 'text-warning'} fw-bold`}>
+                                                        {(value * 100).toFixed(1)}%
+                                                    </span>
+                                                </div>
+                                                <div className="progress prediction-progress" style={{ height: '10px' }}>
+                                                    <div
+                                                        className={`progress-bar ${label === 'Normal' ? 'bg-success' : 'bg-warning'}`}
+                                                        role="progressbar"
+                                                        style={{ width: `${value * 100}%` }}
+                                                        aria-valuenow={value * 100}
+                                                        aria-valuemin="0"
+                                                        aria-valuemax="100"
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        <div className={`diagnosis-card mt-4 ${getHealthStatus()}`}>
+                                            <div className="diagnosis-header">
+                                                <div className="diagnosis-icon">
+                                                    <i className={`bi ${getHealthStatus() === 'healthy' ? 'bi-heart-pulse' : 'bi-clipboard2-pulse'}`}></i>
+                                                </div>
+                                                <h5 className="diagnosis-title">Interprétation :</h5>
+                                            </div>
+                                            <div className="diagnosis-content">
+                                                <p className="mb-0">
+                                                    {predictions['Tuberculosis'] > 0.5 ?
+                                                        "Cette radiographie présente des caractéristiques compatibles avec une tuberculose. Une évaluation clinique complémentaire est recommandée." :
+                                                        "Cette radiographie ne présente pas de signes évidents de tuberculose. Cependant, une évaluation clinique est toujours recommandée pour un diagnostic complet."}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-4 text-center">
+                                            <div className="medical-disclaimer">
+                                                <i className="bi bi-exclamation-circle me-2"></i>
+                                                <small>
+                                                    Ce résultat est généré par intelligence artificielle et ne constitue pas un diagnostic médical.
+                                                    Consultez toujours un professionnel de santé qualifié.
+                                                </small>
+                                            </div>
+
+                                            <div className="action-buttons mt-4">
+                                                <Button
+                                                    variant="outline-primary"
+                                                    className="me-2"
+                                                    onClick={() => {
+                                                        setImagePreview(null);
+                                                        setImage(null);
+                                                        setPredictions(null);
+                                                        setAnalysisCompleted(false);
+                                                        window.scrollTo(0, 0);
+                                                    }}
+                                                >
+                                                    <i className="bi bi-arrow-repeat me-2"></i>
+                                                    Nouvelle analyse
+                                                </Button>
+                                                <Button
+                                                    variant="outline-secondary"
+                                                    onClick={() => window.print()}
+                                                >
+                                                    <i className="bi bi-printer me-2"></i>
+                                                    Imprimer les résultats
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {!loading && !predictions && !error && (
+                                    <div className="text-center py-5 no-results">
+                                        <div className="empty-state-icon">
+                                            <i className="bi bi-image"></i>
+                                        </div>
+                                        <p className="mt-3 lead">
+                                            Veuillez télécharger une image et cliquer sur "Analyser l'image" pour voir les résultats.
+                                        </p>
+                                        <p className="text-muted">
+                                            Formats supportés: radiographies pulmonaires au format JPG, PNG ou JPEG
+                                        </p>
+                                    </div>
+                                )}
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
+    );
+}
+
+// Analyse de pneumonie (structure similaire à TuberculosisAnalysis)
+function PneumoniaAnalysis() {
+    const navigate = useNavigate();
+
+    // Structure similaire à TuberculosisAnalysis avec des adaptations pour la pneumonie
+    return (
+        <div className="pneumonia-analysis-page animate-in">
+            <Container className="py-4">
+                <Button
+                    variant="link"
+                    className="back-button d-inline-flex align-items-center mb-4"
+                    onClick={() => navigate('/health')}
+                >
+                    <i className="bi bi-arrow-left me-2"></i> Retour aux solutions de santé
+                </Button>
+
+                <h1 className="mb-4">Détection de la pneumonie</h1>
+                <p className="lead mb-4">
+                    Notre modèle d'IA analyse les radiographies thoraciques pour détecter efficacement les signes de pneumonie,
+                    facilitant un diagnostic précoce et précis.
+                </p>
+
+                {/* Contenu similaire à TuberculosisAnalysis adapté pour la pneumonie */}
+                <div className="text-center py-5">
+                    <i className="bi bi-tools" style={{ fontSize: '3rem', color: 'var(--gray-400)' }}></i>
+                    <h3 className="mt-3">Module en cours de maintenance</h3>
+                    <p className="text-muted">
+                        Cette fonctionnalité sera bientôt disponible. Veuillez réessayer ultérieurement ou essayer notre
+                        module de détection de la tuberculose.
+                    </p>
+                    <Button
+                        variant="primary"
+                        className="mt-3"
+                        onClick={() => navigate('/health/tuberculosis')}
+                    >
+                        Essayer la détection de tuberculose
+                    </Button>
+                </div>
+            </Container>
+        </div>
+    );
+}
+
+export default HealthPage;

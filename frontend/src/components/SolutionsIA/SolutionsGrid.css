@@ -1,0 +1,137 @@
+/* .solutions-grid {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+}
+
+.solutions-card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 6px 32px rgba(20, 30, 78, 0.08);
+    padding: 1.5rem 2rem;
+    min-width: 220px;
+    max-width: 270px;
+    text-align: center;
+    transition: transform .18s;
+    cursor: pointer;
+}
+
+.solutions-card:hover {
+    transform: translateY(-7px) scale(1.03);
+    box-shadow: 0 12px 32px rgba(45, 62, 212, 0.13);
+}
+
+.solutions-icon {
+    margin-bottom: 1rem;
+}
+
+.solutions-title {
+    font-weight: bold;
+    font-size: 1.13rem;
+    margin-bottom: 0.5rem;
+}
+
+.solutions-desc {
+    font-size: 1rem;
+    color: #26377B;
+}
+
+@media (max-width: 700px) {
+    .solutions-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+    }
+
+    .solutions-card {
+        width: 96vw;
+        max-width: 420px;
+    }
+} */
+
+
+
+
+
+
+
+
+
+.solutions-section {
+    margin: 48px 0;
+    text-align: center;
+}
+
+.solutions-title {
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin-bottom: 2.5rem;
+}
+
+.solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+}
+
+.solution-card {
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 2.5rem 1.4rem 1.7rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+    transition: transform 0.16s, box-shadow 0.16s;
+    min-height: 270px;
+    max-width: 300px;
+    cursor: pointer;
+    position: relative;
+}
+
+.solution-card:hover {
+    transform: translateY(-7px) scale(1.035);
+    box-shadow: 0 16px 48px rgba(39, 91, 214, 0.09);
+}
+
+.solution-icon {
+    margin-bottom: 1.2rem;
+    color: #3262f7;
+}
+
+.solution-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #2a3140;
+}
+
+.solution-desc {
+    color: #596080;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.solution-card.health .solution-icon {
+    color: #14b8a6;
+}
+
+.solution-card.env .solution-icon {
+    color: #6bbf44;
+}
+
+.solution-card.edu .solution-icon {
+    color: #2d70ec;
+}
+
+.solution-card.agri .solution-icon {
+    color: #b9bc3c;
+}
+
+.solution-card.fin .solution-icon {
+    color: #f59e42;
+}
+
+.solution-card.sec .solution-icon {
+    color: #d946ef;
+}

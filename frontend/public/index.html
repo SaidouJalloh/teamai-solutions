@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#4361ee" />
+  <meta name="description"
+    content="TeamAI Solutions - Plateforme de diagnostic médical par IA pour la détection de la tuberculose et de la pneumonie" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+  <!-- Police Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+
+  <!-- Favicons personnalisés -->
+  <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png">
+
+  <!-- Balises Open Graph pour les partages sociaux -->
+  <meta property="og:title" content="TeamAI Solutions - Diagnostic médical par IA" />
+  <meta property="og:description"
+    content="Plateforme d'IA pour la détection de la tuberculose et de la pneumonie à partir de radiographies pulmonaires." />
+  <meta property="og:image" content="%PUBLIC_URL%/og-image.jpg" />
+  <meta property="og:url" content="https://teamai-solutions.com" />
+  <meta property="og:type" content="website" />
+
+  <!-- Balises Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TeamAI Solutions - Diagnostic médical par IA">
+  <meta name="twitter:description"
+    content="Plateforme d'IA pour la détection de la tuberculose et de la pneumonie à partir de radiographies pulmonaires.">
+  <meta name="twitter:image" content="%PUBLIC_URL%/twitter-image.jpg">
+
+  <title>AfriAI-Solutions - Diagnostic médical par IA</title>
+</head>
+
+<body>
+  <noscript>Vous devez activer JavaScript pour utiliser cette application.</noscript>
+  <div id="root"></div>
+
+  <!-- Animation de chargement pendant que React démarre -->
+  <style>
+    .app-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #f9fafb;
+      z-index: 9999;
+      transition: opacity 0.5s ease-out;
+    }
+
+    .app-loader.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-logo {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      background: linear-gradient(to right, #4361ee, #4cc9f0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .loader-spinner {
+      width: 48px;
+      height: 48px;
+      border: 5px solid #e2e8f0;
+      border-bottom-color: #4361ee;
+      border-radius: 50%;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+
+  <div id="app-loader" class="app-loader">
+    <div class="loader-logo"><span style="color:#4361ee">Team</span><span style="color:#4cc9f0">AI</span> Solutions
+    </div>
+    <div class="loader-spinner"></div>
+  </div>
+
+  <script>
+    // Cacher l'animation de chargement une fois que React est chargé
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        document.getElementById('app-loader').classList.add('hide');
+        setTimeout(function () {
+          document.getElementById('app-loader').style.display = 'none';
+        }, 500);
+      }, 1000);
+    });
+  </script>
+</body>
+
+</html>

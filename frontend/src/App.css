@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+  background: #f8f9fd;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1 0 auto;
+  max-width: 1200px;
+  margin: 36px auto 0 auto;
+  width: 100%;
+  padding: 0 18px;
+  box-sizing: border-box;
+}
